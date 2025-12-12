@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TV & Streaming Tool</title>
+
+  <style>
+    :root{
+      --header:#d8c7ff;
+      --bg:#f5f5f7;
+      --panel:#ffffff;
+      --border:#ddd;
+      --selected:#eeeeee;
+      --text:#111;
+      --muted:#666;
+      --toggleOff:#cfcfcf;
+      --toggleOn:#7b5cff;
+    }
+
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      font-family: Arial, Helvetica, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+
+    .wrap{
+      max-width:1100px;
+      margin:0 auto;
+      padding:14px;
+    }
+
+    .header{
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:12px;
+      background:var(--header);
+      padding:14px;
+      border-radius:10px;
+      font-weight:700;
+      align-items:center;
+    }
+
+    .header .right{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+    }
+
+    button{
+      padding:6px 12px;
+      border:1px solid #222;
+      background:#fff;
+      border-radius:10px;
+      cursor:pointer;
+      font-weight:700;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:12px;
+      margin-top:12px;
+    }
+
+    .panel{
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:10px;
+      padding:10px;
+      min-height:520px;
+    }
+
+    .list{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .row{
+      display:grid;
+      grid-template-columns:26px 1fr auto;
+      gap:10px;
+      align-items:center;
+      padding:10px;
+      border-radius:8px;
+      cursor:pointer;
+    }
+
+    .row.selected{ background:var(--selected); }
+
+    .nameRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+
+    .name{ font-weight:700; font-size:18px; }
+    .sub{ font-size:12px; color:var(--muted); margin-top:2px; }
+    .price{ font-weight:800; font-size:20px; min-width:90px; text-align:right; }
+
+    .toggleWrap{
+      display:flex;
+      align-items:center;
+      gap:6px;
+      font-size:12px;
+      white-space:nowrap;
+      opacity:.45;
+      pointer-events:none;
+    }
+
+    .toggleWrap.active{
+      opacity:1;
+      pointer-events:auto;
+    }
+
+    .toggle{
+      width:42px;
+      height:22px;
+      border-radius:999px;
+      background:var(--toggleOff);
+      position:relative;
+      transition:.15s;
+    }
+
+    .toggle::after{
+      content:"";
+      position:absolute;
+      top:3px;
+      left:3px;
+      width:16px;
+      height:16px;
+      border-radius:50%;
+      background:#fff;
+      transition:.15s;
+    }
+
+    .toggle.on{
+      background:var(--toggleOn);
+    }
+
+    .toggle.on::after{
+      transform:translateX(20px);
+    }
+
+    .total{
+      font-size:52px;
+      font-weight:900;
+      margin:8px 0 18px;
+    }
+
+    .features{
+      border-top:1px solid var(--border);
+      padding-top:12px;
+      font-size:14px;
+      line-height:1.35;
+      min-height:120px;
+    }
+
+    @media (max-width:1000px){
+      .header{ grid-template-columns:1fr; }
+      .grid{ grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="header">
+      <div>Streaming Services</div>
+      <div>TV Services</div>
+      <div class="right">
+        <div>Total Price & Features</div>
+        <button id="resetBtn">Reset All</button>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="panel"><div class="list" id="streamingList"></div></div>
+      <div class="panel"><div class="list" id="tvList"></div></div>
+      <div class="panel">
+        <h3>Total Monthly Price</h3>
+        <div class="total" id="totalPrice">$0.00</div>
+        <h3>Features</h3>
+        <div class="features" id="features">None selected</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let services = [];
+    const selected = new Set();
+    const withAds = new Set();
+
+    const streamingList = document.getElementById("streamingList");
+    const tvList = document.getElementById("tvList");
+    const totalEl = document.getElementById("totalPrice");
+    const featuresEl = document.getElementById("features");
+
+    fetch("prices.json?v=" + Date.now())
+      .then(r => r.json())
+      .then(data => {
+        services = data;
+        render();
+      });
+
+    function money(n){
+      return n.toLocaleString(undefined,{style:"currency",currency:"USD"});
+    }
+
+    function supportsAds(s){
+      return s.priceNoAds !== undefined;
+    }
+
+    function priceFor(s){
+      if (supportsAds(s)) return withAds.has(s.name) ? s.priceWithAds : s.priceNoAds;
+      return s.price;
+    }
+
+    function featureText(s){
+      const f = s.features || {};
+      const parts=[];
+      if (supportsAds(s)) parts.push(withAds.has(s.name)?"with ads":"no ads");
+      if (f.channels) parts.push("Channels: "+f.channels);
+      if (f.dvr) parts.push("DVR: "+f.dvr);
+      if (f.streams) parts.push("Streams: "+f.streams);
+      return parts.join(" | ");
+    }
+
+    function render(){
+      streamingList.innerHTML="";
+      tvList.innerHTML="";
+
+      let total=0;
+      let lines=[];
+
+      services.forEach(s=>{
+        if (selected.has(s.name)) {
+          total+=priceFor(s);
+          lines.push(`${s.name} | ${featureText(s)}`);
+        }
+
+        const row=document.createElement("div");
+        row.className="row"+(selected.has(s.name)?" selected":"");
+
+        const cb=document.createElement("input");
+        cb.type="checkbox";
+        cb.checked=selected.has(s.name);
+        cb.onclick=e=>e.stopPropagation();
+        cb.onchange=()=>{
+          if(cb.checked) selected.add(s.name);
+          else { selected.delete(s.name); withAds.delete(s.name); }
+          render();
+        };
+
+        const mid=document.createElement("div");
+        const nameRow=document.createElement("div");
+        nameRow.className="nameRow";
+
+        const name=document.createElement("div");
+        name.className="name";
+        name.textContent=s.name;
+        nameRow.appendChild(name);
+
+        if (supportsAds(s)){
+          const wrap=document.createElement("div");
+          wrap.className="toggleWrap"+(selected.has(s.name)?" active":"");
+          wrap.innerHTML=`<span>With Ads?</span>`;
+          const t=document.createElement("div");
+          t.className="toggle"+(withAds.has(s.name)?" on":"");
+          t.onclick=e=>{
+            e.stopPropagation();
+            if(!selected.has(s.name))return;
+            withAds.has(s.name)?withAds.delete(s.name):withAds.add(s.name);
+            render();
+          };
+          wrap.appendChild(t);
+          nameRow.appendChild(wrap);
+        }
+
+        const sub=document.createElement("div");
+        sub.className="sub";
+        sub.textContent=featureText(s);
+
+        mid.appendChild(nameRow);
+        mid.appendChild(sub);
+
+        const price=document.createElement("div");
+        price.className="price";
+        price.textContent=money(priceFor(s));
+
+        row.onclick=()=>{
+          selected.has(s.name)?selected.delete(s.name):selected.add(s.name);
+          if(!selected.has(s.name))withAds.delete(s.name);
+          render();
+        };
+
+        row.append(cb,mid,price);
+        (s.category==="Streaming"?streamingList:tvList).appendChild(row);
+      });
+
+      totalEl.textContent=money(total);
+      featuresEl.innerHTML=lines.length?lines.join("<br>"):"None selected";
+    }
+
+    document.getElementById("resetBtn").onclick=()=>{
+      selected.clear();
+      withAds.clear();
+      render();
+    };
+  </script>
+</body>
+</html>
+
