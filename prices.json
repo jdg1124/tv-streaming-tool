@@ -1,18 +1,141 @@
 [
-  { "category":"Streaming", "name":"Apple TV+", "price":12.99, "features":{ "streams":"6" } },
-  { "category":"Streaming", "name":"Prime Video", "price":14.99, "features":{ "streams":"3" } },
-
-  { "category":"Streaming", "name":"Disney+", "priceNoAds":13.99, "priceWithAds":11.99, "features":{ "streams":"Up to 4" } },
-  { "category":"Streaming", "name":"Hulu", "priceNoAds":18.99, "priceWithAds":11.99, "features":{ "streams":"2" } },
-  { "category":"Streaming", "name":"Max", "priceNoAds":18.49, "priceWithAds":9.99, "features":{ "streams":"Up to 4" } },
-  { "category":"Streaming", "name":"Netflix", "priceNoAds":24.99, "priceWithAds":7.99, "features":{ "streams":"Up to 4" } },
-  { "category":"Streaming", "name":"Paramount+", "priceNoAds":13.99, "priceWithAds":8.99, "features":{ "streams":"Up to 4" } },
-  { "category":"Streaming", "name":"Peacock", "priceNoAds":16.99, "priceWithAds":7.99, "features":{ "streams":"3" } },
-
-  { "category":"TV", "name":"DirecTV", "price":124.99, "features":{ "channels":"125+", "dvr":"200/400 hours" } },
-  { "category":"TV", "name":"DirecTV Stream", "price":89.99, "features":{ "channels":"75+", "dvr":"Unlimited", "streams":"Unlimited" } },
-  { "category":"TV", "name":"Fubo TV", "price":79.99, "features":{ "channels":"205+", "dvr":"1000 hours", "streams":"Up to 10" } },
-  { "category":"TV", "name":"Hulu + Live TV", "price":88.99, "features":{ "channels":"85+", "dvr":"Unlimited", "streams":"2" } },
-  { "category":"TV", "name":"Sling TV", "price":45.99, "features":{ "channels":"40+", "dvr":"50 hours", "streams":"Up to 4" } },
-  { "category":"TV", "name":"YouTube TV", "price":82.99, "features":{ "channels":"100+", "dvr":"Unlimited", "streams":"3" } }
+  {
+    "category": "Streaming",
+    "name": "Apple TV+",
+    "price": 12.99,
+    "features": {
+      "streams": "6"
+    }
+  },
+  {
+    "category": "Streaming",
+    "name": "Prime Video",
+    "price": 14.99,
+    "features": {
+      "streams": "3"
+    }
+  },
+  {
+    "category": "Streaming",
+    "name": "Disney+",
+    "priceNoAds": 18.99,
+    "priceWithAds": 11.99,
+    "features": {
+      "streams": "Up to 4"
+    }
+  },
+  {
+    "category": "Streaming",
+    "name": "Hulu",
+    "priceNoAds": 18.99,
+    "priceWithAds": 11.99,
+    "features": {
+      "streams": "2"
+    }
+  },
+  {
+    "category": "Streaming",
+    "name": "Max",
+    "priceNoAds": 18.49,
+    "priceWithAds": 10.99,
+    "features": {
+      "streams": "Up to 4"
+    }
+  },
+  {
+    "category": "Streaming",
+    "name": "Netflix",
+    "priceNoAds": 26.99,
+    "priceWithAds": 8.99,
+    "features": {
+      "streams": "Up to 4"
+    }
+  },
+  {
+    "category": "Streaming",
+    "name": "Paramount+",
+    "priceNoAds": 13.99,
+    "priceWithAds": 8.99,
+    "features": {
+      "streams": "Up to 4"
+    }
+  },
+  {
+    "category": "Streaming",
+    "name": "Peacock",
+    "priceNoAds": 16.99,
+    "priceWithAds": 10.99,
+    "features": {
+      "streams": "3"
+    }
+  },
+  {
+    "category": "TV",
+    "name": "DirecTV",
+    "price": 114.98,
+    "features": {
+      "channels": "125+",
+      "dvr": "200/400 hours"
+    }
+  },
+  {
+    "category": "TV",
+    "name": "DirecTV Stream",
+    "price": 94.99,
+    "features": {
+      "channels": "90+",
+      "dvr": "Unlimited",
+      "streams": "Unlimited"
+    }
+  },
+  {
+    "category": "TV",
+    "name": "Fubo TV",
+    "price": 83.99,
+    "features": {
+      "channels": "200+",
+      "dvr": "1000 hours",
+      "streams": "Up to 10"
+    }
+  },
+  {
+    "category": "TV",
+    "name": "Hulu + Live TV",
+    "price": 89.99,
+    "features": {
+      "channels": "95+",
+      "dvr": "Unlimited",
+      "streams": "2"
+    }
+  },
+  {
+    "category": "TV",
+    "name": "Sling TV",
+    "price": 45.99,
+    "features": {
+      "channels": "40+",
+      "dvr": "50 hours",
+      "streams": "Up to 4"
+    }
+  },
+  {
+    "category": "TV",
+    "name": "YouTube TV",
+    "price": 82.99,
+    "features": {
+      "channels": "100+",
+      "dvr": "Unlimited",
+      "streams": "3"
+    }
+  },
+  {
+    "category": "TV",
+    "name": "Dish TV",
+    "price": 79.99,
+    "features": {
+      "channels": "190+",
+      "dvr": "500 hours",
+      "streams": "Up to 3"
+    }
+  }
 ]
